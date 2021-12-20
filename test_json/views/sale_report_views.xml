@@ -1,0 +1,207 @@
+<odoo>
+    <template id="report_template">
+        <t t-call="web.basic_layout">
+            <t t-foreach="docs" t-as="doc">
+                <t t-foreach="doc" t-as="page">
+                    <div class="page">
+                        <style>
+                            table td {
+                                width: 7.69%;
+                                padding-right: 10px;
+                            }
+                            table td div {
+                                text-align: right;
+                            }
+                            table td div span {
+                                padding-right: 10px;
+                            }
+                            .bg-light-gray {
+                                background: #b3b3b3;
+                            }
+                            .bg-light-blue {
+                                background: #3194ffa8;
+                            }
+                            .bg-light-pink {
+                                background: #ffc3c8;
+                            }
+                            .bg-light-green {
+                                background: #66d166;
+                            }
+                        </style>
+                        <div>
+                            <span class="float-left">Project: <t t-esc="page.partner_id.name"/></span>
+                            <span class="float-right">Report on: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d.%m.%Y')"/></span>
+                        </div>
+                        <br/><br/>
+                        <table class="w-100">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="border-bottom border-dark">
+                                            <span>
+                                                Labor Type
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span>Cost</span>
+                                        </div>
+                                        <div class="bg-light-gray">
+                                            <span>Sell</span>
+                                        </div>
+                                        <div style="height: 40px;"/>
+                                        <div class="border-top border-dark bg-light-blue">
+                                            <span t-field="page.name"/>
+                                        </div>
+                                        <div class="border-dark border-bottom bg-light-blue">
+                                            <span>Total Hours</span>
+                                        </div>
+                                        <div class="bg-light-gray">
+                                            <span>Total Cost</span>
+                                        </div>
+                                        <div class="">
+                                            <span>Total Retail</span>
+                                        </div>
+                                        <div style="height: 40px;"/>
+                                        <div class="border-dark border-top bg-light-pink">
+                                            <span>Sub Contractor Hours</span>
+                                        </div>
+                                        <div class="bg-light-pink">
+                                            <span>Total Hours</span>
+                                        </div>
+                                        <div class="border-bottom border-dark bg-light-pink">
+                                            <span>Hour Remaining</span>
+                                        </div>
+                                        <div style="height: 40px;"/>
+                                        <div class="border-top border-dark">
+                                            <span>Cost Δ</span>
+                                        </div>
+                                        <div class="border-bottom border-dark">
+                                            <span>Sell Δ</span>
+                                        </div>
+                                    </td>
+
+                                    <t t-set="lines" t-value="page.order_line.filtered(lambda r: r.product_id.type == 'service')"/>
+                                    <t t-set="index" t-value="0"/>
+                                    <t t-foreach="lines" t-as="line">
+                                        <t t-set="index" t-value="index + 1"/>
+                                        <td>
+                                            <div class="border-bottom border-dark">
+                                                <span t-field="line.product_id.name"/>
+                                            </div>
+                                            <div>
+                                                <span t-field="line.product_id.standard_price"/>
+                                            </div>
+                                            <div class="bg-light-gray">
+                                                <span t-field="line.product_id.list_price"/>
+                                            </div>
+                                            <div style="height: 40px;"/>
+                                            <t t-if="index == len(lines)">
+                                                <div class="border-top border-right border-dark bg-light-blue">
+                                                    <span t-esc="line.product_uom_qty"/>
+                                                </div>
+                                                <div class="border-right border-bottom border-dark bg-light-blue">
+                                                    <span t-esc="line.product_uom_qty"/>
+                                                </div>
+                                            </t>
+                                            <t t-else="">
+                                                <div class="border-top border-dark bg-light-blue">
+                                                    <span t-esc="line.product_uom_qty"/>
+                                                </div>
+                                                <div class="border-dark border-bottom bg-light-blue">
+                                                    <span t-esc="line.product_uom_qty"/>
+                                                </div>
+                                            </t>
+                                            <div class="bg-light-gray">
+                                                <span t-esc="line.product_uom_qty * line.product_id.standard_price"/>
+                                            </div>
+                                            <div class="">
+                                                <span t-esc="line.product_uom_qty * line.product_id.list_price"/>
+                                            </div>
+                                            <div style="height: 40px;"/>
+                                            <t t-if="index == len(lines)">
+                                                <div class="border-top border-right border-dark bg-light-pink">
+                                                    <span>-</span>
+                                                </div>
+                                                <div class="bg-light-pink border-right border-dark">
+                                                    <span t-field="line.qty_delivered"/>
+                                                </div>
+                                                <div class="bg-light-pink border-right border-bottom border-dark">
+                                                    <span t-esc="line.product_uom_qty - line.qty_delivered" t-options="{'widget': 'float', 'precision': 2}"/>
+                                                </div>
+                                            </t>
+                                            <t t-else="">
+                                                <div class="border-top border-dark bg-light-pink">
+                                                    <span>-</span>
+                                                </div>
+                                                <div class="bg-light-pink">
+                                                    <span t-field="line.qty_delivered"/>
+                                                </div>
+                                                <div class="bg-light-pink border-bottom border-dark">
+                                                    <span t-esc="line.product_uom_qty - line.qty_delivered" t-options="{'widget': 'float', 'precision': 2}"/>
+                                                </div>
+                                            </t>
+                                            <div style="height: 40px;"/>
+                                            <t t-set="delta_cost" t-value="line.product_uom_qty * line.product_id.standard_price - line.qty_delivered * line.product_id.standard_price"/>
+                                            <t t-set="delta_sell" t-value="line.product_uom_qty * line.product_id.list_price - line.qty_delivered * line.product_id.list_price"/>
+                                            <t t-if="index == len(lines)">
+                                                <t t-if="delta_cost &lt; 0">
+                                                    <div class="border-top border-right border-dark bg-light-pink">
+                                                        <span t-esc="delta_cost"/>
+                                                    </div>
+                                                </t>
+                                                <t t-else="">
+                                                    <div class="border-top border-right border-dark bg-light-green">
+                                                        <span t-esc="delta_cost"/>
+                                                    </div>
+                                                </t>
+                                                <t t-if="delta_sell &lt; 0">
+                                                    <div class="border-bottom border-right border-dark bg-light-pink">
+                                                        <span t-esc="delta_sell"/>
+                                                    </div>
+                                                </t>
+                                                <t t-else="">
+                                                    <div class="border-bottom border-right border-dark bg-light-green">
+                                                        <span t-esc="delta_sell"/>
+                                                    </div>
+                                                </t>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-if="delta_cost &lt; 0">
+                                                    <div class="border-top border-dark bg-light-pink">
+                                                        <span t-esc="delta_cost"/>
+                                                    </div>
+                                                </t>
+                                                <t t-else="">
+                                                    <div class="border-top border-dark bg-light-green">
+                                                        <span t-esc="delta_cost"/>
+                                                    </div>
+                                                </t>
+                                                <t t-if="delta_sell &lt; 0">
+                                                    <div class="border-bottom border-dark bg-light-pink">
+                                                        <span t-esc="delta_sell"/>
+                                                    </div>
+                                                </t>
+                                                <t t-else="">
+                                                    <div class="border-bottom border-dark bg-light-green">
+                                                        <span t-esc="delta_sell"/>
+                                                    </div>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr/>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="test_report">
+        <t t-call="web.html_container">
+            <t t-call="test_json.report_template" />
+        </t>
+    </template>
+</odoo>

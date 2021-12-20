@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="product_category_phase" model="product.category">
+        <field name="name">Phase</field>
+    </record>
+    <record id="test_vendor" model="res.partner">
+        <field name="name">TestVendor</field>
+        <field name="company_type">person</field>
+        <field name="type">contact</field>
+    </record>
+</odoo>
