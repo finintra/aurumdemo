@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='price_unit']" position="before">
+                <field name="product_standard_price"/>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='tax_id']" position="after">
+                <field name="labor_hours"/>
+            </xpath>
+            <xpath expr="//page[@name='order_lines']/field[@name='order_line']/tree/field[@name='price_subtotal']" position="replace">
+                <field name="subtotal"/>
+            </xpath>
+            <group name="sale_total" position="replace">
+                <group>
+                    <field name="total_subtotal"/>
+                </group>
+            </group>
+        </field>
+
+    </record>
+
+    <report
+        id="action_test_report"
+        string="Test Report"
+        model="sale.order"
+        report_type="qweb-html"
+        file="test_json.sale_report_views"
+        name="test_json.test_report"
+        print_report_name="'Test Report №%s' % (object.id)"
+    />
+</odoo>

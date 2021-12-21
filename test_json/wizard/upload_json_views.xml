@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_upload_json" model="ir.actions.act_window">
+        <field name="name">Upload JSON</field>
+        <field name="res_model">upload.json</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="upload_json_view_form" model="ir.ui.view">
+        <field name="name">upload.json.view.form</field>
+        <field name="model">upload.json</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="file" filename="filename"/>
+                        <field name="filename" invisible="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button type="object" name="action_upload" string="Upload" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <menuitem
+        id="upload_json_menu_action"
+        name="Upload JSON"
+        parent="sale.sale_order_menu"
+        action="action_upload_json"
+        sequence="10"
+    />
+</odoo>
