@@ -63,9 +63,6 @@
                                         </div>
                                         <div style="height: 40px;"/>
                                         <div class="border-dark border-top bg-light-pink">
-                                            <span>Sub Contractor Hours</span>
-                                        </div>
-                                        <div class="bg-light-pink">
                                             <span>Total Hours</span>
                                         </div>
                                         <div class="border-bottom border-dark bg-light-pink">
@@ -89,9 +86,11 @@
                                                 <span t-field="line.product_id.name"/>
                                             </div>
                                             <div>
+                                                <span t-field="page.currency_id.symbol"/>
                                                 <span t-field="line.product_id.standard_price"/>
                                             </div>
                                             <div class="bg-light-gray">
+                                                <span t-field="page.currency_id.symbol"/>
                                                 <span t-field="line.product_id.list_price"/>
                                             </div>
                                             <div style="height: 40px;"/>
@@ -112,31 +111,29 @@
                                                 </div>
                                             </t>
                                             <div class="bg-light-gray">
+                                                <span t-field="page.currency_id.symbol"/>
                                                 <span t-esc="line.product_uom_qty * line.product_id.standard_price"/>
                                             </div>
                                             <div class="">
+                                                <span t-field="page.currency_id.symbol"/>
                                                 <span t-esc="line.product_uom_qty * line.product_id.list_price"/>
                                             </div>
                                             <div style="height: 40px;"/>
                                             <t t-if="index == len(lines)">
-                                                <div class="border-top border-right border-dark bg-light-pink">
-                                                    <span>-</span>
-                                                </div>
-                                                <div class="bg-light-pink border-right border-dark">
+                                                <div class="bg-light-pink border-top border-right border-dark">
                                                     <span t-field="line.qty_delivered"/>
                                                 </div>
                                                 <div class="bg-light-pink border-right border-bottom border-dark">
+                                                    <span t-field="page.currency_id.symbol"/>
                                                     <span t-esc="line.product_uom_qty - line.qty_delivered" t-options="{'widget': 'float', 'precision': 2}"/>
                                                 </div>
                                             </t>
                                             <t t-else="">
-                                                <div class="border-top border-dark bg-light-pink">
-                                                    <span>-</span>
-                                                </div>
-                                                <div class="bg-light-pink">
+                                                <div class="bg-light-pink border-top border-dark">
                                                     <span t-field="line.qty_delivered"/>
                                                 </div>
                                                 <div class="bg-light-pink border-bottom border-dark">
+                                                    <span t-field="page.currency_id.symbol"/>
                                                     <span t-esc="line.product_uom_qty - line.qty_delivered" t-options="{'widget': 'float', 'precision': 2}"/>
                                                 </div>
                                             </t>
@@ -146,21 +143,25 @@
                                             <t t-if="index == len(lines)">
                                                 <t t-if="delta_cost &lt; 0">
                                                     <div class="border-top border-right border-dark bg-light-pink">
+                                                        <span t-field="page.currency_id.symbol"/>
                                                         <span t-esc="delta_cost"/>
                                                     </div>
                                                 </t>
                                                 <t t-else="">
                                                     <div class="border-top border-right border-dark bg-light-green">
+                                                        <span t-field="page.currency_id.symbol"/>
                                                         <span t-esc="delta_cost"/>
                                                     </div>
                                                 </t>
                                                 <t t-if="delta_sell &lt; 0">
                                                     <div class="border-bottom border-right border-dark bg-light-pink">
+                                                        <span t-field="page.currency_id.symbol"/>
                                                         <span t-esc="delta_sell"/>
                                                     </div>
                                                 </t>
                                                 <t t-else="">
                                                     <div class="border-bottom border-right border-dark bg-light-green">
+                                                        <span t-field="page.currency_id.symbol"/>
                                                         <span t-esc="delta_sell"/>
                                                     </div>
                                                 </t>
@@ -168,21 +169,25 @@
                                             <t t-else="">
                                                 <t t-if="delta_cost &lt; 0">
                                                     <div class="border-top border-dark bg-light-pink">
+                                                        <span t-field="page.currency_id.symbol"/>
                                                         <span t-esc="delta_cost"/>
                                                     </div>
                                                 </t>
                                                 <t t-else="">
                                                     <div class="border-top border-dark bg-light-green">
+                                                        <span t-field="page.currency_id.symbol"/>
                                                         <span t-esc="delta_cost"/>
                                                     </div>
                                                 </t>
                                                 <t t-if="delta_sell &lt; 0">
                                                     <div class="border-bottom border-dark bg-light-pink">
+                                                        <span t-field="page.currency_id.symbol"/>
                                                         <span t-esc="delta_sell"/>
                                                     </div>
                                                 </t>
                                                 <t t-else="">
                                                     <div class="border-bottom border-dark bg-light-green">
+                                                        <span t-field="page.currency_id.symbol"/>
                                                         <span t-esc="delta_sell"/>
                                                     </div>
                                                 </t>
